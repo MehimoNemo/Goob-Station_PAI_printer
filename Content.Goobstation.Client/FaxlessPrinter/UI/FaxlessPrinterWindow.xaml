@@ -1,0 +1,64 @@
+<DefaultWindow
+    x:Class="Content.Goobstation.Client.FaxlessPrinter.UI.FaxlessPrinterWindow"
+    xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="{Loc 'faxless-printer-ui-window'}"
+    MinSize="380 220">
+
+    <BoxContainer Orientation="Vertical" SeparationOverride="2" VerticalExpand="True">
+
+        <!-- Top Panel -->
+        <PanelContainer StyleClasses="PanelBackgroundBaseDark"
+                        HorizontalExpand="True">
+
+            <BoxContainer Orientation="Vertical" Margin="0 0 0 2">
+
+                <!-- Send & Copy Section -->
+                <BoxContainer Orientation="Vertical">
+
+                    <!-- Paper Status -->
+                    <Label Name="PaperStatusLabel" HorizontalAlignment="Center" />
+
+                    <!-- Copy Button -->
+                    <BoxContainer>
+                        <Button Name="CopyButton"
+                                Text="{Loc 'fax-machine-ui-copy-button'}"
+                                StyleClasses="OpenRight"
+                                HorizontalExpand="True"
+                                Disabled="True" />
+                    </BoxContainer>
+
+                </BoxContainer>
+
+            </BoxContainer>
+        </PanelContainer>
+
+        <!-- Bottom Panel -->
+        <PanelContainer StyleClasses="PanelBackgroundBaseDark"
+                        HorizontalExpand="True"
+                        Margin="0 10 0 0"
+                        VerticalExpand="True"
+                        VerticalAlignment="Bottom">
+
+            <BoxContainer Orientation="Vertical" VerticalExpand="True">
+
+                <!-- Other actions -->
+                <BoxContainer Margin="0 4 0 4">
+
+                    <Button Name="PaperButton"
+                            Text="{Loc 'fax-machine-ui-paper-button-normal'}"
+                            StyleClasses="OpenRight"
+                            HorizontalExpand="True" />
+
+                    <Button Name="FileButton"
+                            Text="{Loc 'fax-machine-ui-file-button'}"
+                            StyleClasses="OpenLeft"
+                            HorizontalExpand="True" />
+
+                </BoxContainer>
+
+            </BoxContainer>
+        </PanelContainer>
+
+    </BoxContainer>
+</DefaultWindow>
