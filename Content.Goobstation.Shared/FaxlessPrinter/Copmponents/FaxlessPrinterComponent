@@ -1,0 +1,6 @@
+[RegisterComponent]
+public sealed class FaxlessPrinterComponent : Component
+{
+    [ViewVariables]
+    public Enum UiKey = FaxUiKey.Key;
+}

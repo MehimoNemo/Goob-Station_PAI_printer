@@ -139,6 +139,9 @@
       enum.StationMapUiKey.Key:
         type: StationMapBoundUserInterface
         requireInputValidation: false
+      enum.FaxlessPrinterUiKey.Key:
+        type: FaxlessPrinterBoundUserInterface
+        requireInputValidation: false
   - type: Sprite
     sprite: Objects/Fun/pai.rsi
     layers:
@@ -265,6 +268,13 @@
   - type: Tag
     tags:
     - SiliconEmotes
+  - type: FaxlessPrinter
+    paperSlot:
+      insertSound: /Audio/Machines/scanning.ogg
+      ejectSound: /Audio/Machines/tray_eject.ogg
+      whitelist:
+        components:
+          - FaxableObject #used to be PaperComponent - brainfood1183
 
 - type: entity
   parent: [ PersonalAI, BaseSyndicateContraband]
@@ -304,6 +314,7 @@
   - type: Vocal
     sounds:
       Unsexed: UnisexSiliconSyndicate
+  
 
 - type: entity
   parent: PersonalAI
@@ -402,3 +413,16 @@
   - type: InstantAction
     event: !type:OpenUiActionEvent
       key: enum.StationMapUiKey.Key
+
+- type: entity
+  parent: BaseMentalAction
+  id: ActionPAIOpenPrinter
+  name: Open Printer
+  description: Open your printer and print something for your owner.
+  components:
+  - type: Action
+    icon: { sprite: Interface/Actions/actions_ai.rsi, state: comms_console }
+    itemIconStyle: NoItem
+  - type: InstantAction
+    event: !type:OpenUiActionEvent
+      key: enum.FaxlessPrinterUiKey.Key
