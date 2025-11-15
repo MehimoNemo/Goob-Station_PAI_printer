@@ -14,35 +14,39 @@ public sealed class FaxlessPrinterBoundUi : BoundUserInterface
 
     protected override void Open()
     {
+        if (_window != null)
+            return;
+
         _window = new FaxlessPrinterWindow();
 
-        _window.OnSend += () => SendMessage(new FaxSendMessage());
-
-        _window.OnLoadPaper += () =>
+        // Button events
+        _window.OnSend += () =>
         {
-            // Reuse FaxFileMessage to simulate loading paper
-            SendMessage(new FaxFileMessage(null, string.Empty, true));
+            Logger.Info("Fax Send button pressed!");
+            SendMessage(new FaxSendMessage());
         };
+        _window.OnLoadPaper += () => SendMessage(new FaxFileMessage(null, "", true));
+        _window.OnCopy += () => SendMessage(new FaxCopyMessage());
 
-        _window.OnRecipientChanged += recipient => SendMessage(new FaxDestinationMessage(recipient));
+        _window.OnClose += () =>
+        {
+            _window?.CloseWindow();
+            _window = null;
+        };
 
         _window.OpenCentered();
     }
 
     protected override void ReceiveMessage(BoundUserInterfaceMessage msg)
     {
-        // Handle only messages if you have any custom ones for FaxlessPrinter
+        // Optional: handle custom messages
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
     {
-        if (_window == null)
+        if (_window == null || state is not FaxUiState faxState)
             return;
 
-        if (state is FaxUiState faxState)
-        {
-            // Wrap the original FaxUiState into your FaxlessPrinterUiState
-            _window.UpdateState(new FaxlessPrinterUiState(faxState));
-        }
+        _window.UpdateState(new FaxlessPrinterUiState(faxState));
     }
 }

@@ -140,7 +140,7 @@
         type: StationMapBoundUserInterface
         requireInputValidation: false
       enum.FaxlessPrinterUiKey.Key:
-        type: FaxlessPrinterBoundUserInterface
+        type: FaxlessPrinterBoundUi
         requireInputValidation: false
   - type: Sprite
     sprite: Objects/Fun/pai.rsi
@@ -275,6 +275,14 @@
       whitelist:
         components:
           - FaxableObject #used to be PaperComponent - brainfood1183
+  - type: FaxMachine
+    paperSlot:
+      insertSound: /Audio/Machines/scanning.ogg
+      ejectSound: /Audio/Machines/tray_eject.ogg
+      whitelist:
+        components:
+          - FaxableObject #used to be PaperComponent - brainfood1183
+
 
 - type: entity
   parent: [ PersonalAI, BaseSyndicateContraband]
