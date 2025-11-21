@@ -19,15 +19,10 @@ public sealed class FaxlessPrinterBoundUi : BoundUserInterface
 
         _window = new FaxlessPrinterWindow();
 
-        // Button events
-        _window.OnSend += () =>
-        {
-            Logger.Info("Fax Send button pressed!");
-            SendMessage(new FaxSendMessage());
-        };
+        // Forward button presses to the server
+        _window.OnSend += () => SendMessage(new FaxSendMessage());
         _window.OnLoadPaper += () => SendMessage(new FaxFileMessage(null, "", true));
         _window.OnCopy += () => SendMessage(new FaxCopyMessage());
-
         _window.OnClose += () =>
         {
             _window?.CloseWindow();
@@ -39,7 +34,7 @@ public sealed class FaxlessPrinterBoundUi : BoundUserInterface
 
     protected override void ReceiveMessage(BoundUserInterfaceMessage msg)
     {
-        // Optional: handle custom messages
+        // Optional: handle custom messages from server
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)
