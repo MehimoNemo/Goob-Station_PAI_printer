@@ -29,12 +29,15 @@ public sealed class FaxUiState : BoundUserInterfaceState
     public bool CanSend { get; }
     public bool CanCopy { get; }
 
+    public bool IsFaxless{ get; }
+
     public FaxUiState(string deviceName,
         Dictionary<string, string> peers,
         bool canSend,
         bool canCopy,
         bool isPaperInserted,
-        string? destAddress)
+        string? destAddress,
+        bool isFaxless)
     {
         DeviceName = deviceName;
         AvailablePeers = peers;
@@ -42,6 +45,7 @@ public sealed class FaxUiState : BoundUserInterfaceState
         CanSend = canSend;
         CanCopy = canCopy;
         DestinationAddress = destAddress;
+        IsFaxless = isFaxless;
     }
 }
 

@@ -141,6 +141,13 @@ public sealed partial class FaxMachineComponent : Component
     [DataField]
     public bool ReceiveNukeCodes { get; set; } = false;
 
+        /// <summary>
+    /// Is this a fax machine, or just a printer
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)]
+    [DataField(required: false)]
+    public bool IsFaxless { get; set; } = false;
+
     /// <summary>
     /// Sound to play when fax printing new message
     /// </summary>

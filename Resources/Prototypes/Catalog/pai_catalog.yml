@@ -41,3 +41,16 @@
   conditions:
   - !type:ListingLimitedStockCondition
     stock: 1
+
+- type: listing
+  id: PAIFaxlessPrinter
+  name: pai-faxless-printer-name
+  description: pai-faxless-printer-desc
+  productAction: ActionPAIOpenPrinter
+  cost:
+    SiliconMemory: 5
+  categories:
+  - PAIAbilities
+  conditions:
+  - !type:ListingLimitedStockCondition
+    stock: 1

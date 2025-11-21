@@ -16,6 +16,7 @@ using System.IO;
 using Content.Shared.Fax;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
+using Robust.Shared.Log;
 
 namespace Content.Client.Fax.UI;
 
@@ -28,6 +29,7 @@ public sealed class FaxBoundUi : BoundUserInterface
     private FaxWindow? _window;
 
     private bool _dialogIsOpen = false;
+    private FaxUiState? _lastState;
 
     public FaxBoundUi(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
@@ -36,14 +38,56 @@ public sealed class FaxBoundUi : BoundUserInterface
     protected override void Open()
     {
         base.Open();
+        Logger.InfoS("fax", $"Opening FaxBoundUi for entity {Owner}");
 
+        if (_lastState?.IsFaxless == true)
+        {
+            Logger.InfoS("fax", "Creating FaxlessWindow");
+            _window = this.CreateWindow<FaxWindow>();
+            HookFaxlessWindowEvents();
+        }
+        else
+        {
+            Logger.InfoS("fax", "Creating FaxWindow");
+            _window = this.CreateWindow<FaxWindow>();
+            HookFaxWindowEvents();
+        }
+    }
+
+
+    private void OpenFaxlessUI()
+    {
+        _window?.Dispose();
         _window = this.CreateWindow<FaxWindow>();
+        HookFaxlessWindowEvents();
+    }
+
+    private void OpenFaxUI()
+    {
+        _window?.Dispose();
+        _window = this.CreateWindow<FaxWindow>();
+        HookFaxWindowEvents();
+    }
+
+
+    private void HookFaxlessWindowEvents()
+    {
+        if (_window == null || _window.Disposed)
+            return;
+        _window.FileButtonPressed += OnFileButtonPressed;
+        _window.CopyButtonPressed += OnCopyButtonPressed;
+    }
+    private void HookFaxWindowEvents()
+    {
+        if (_window == null || _window.Disposed)
+            return;
         _window.FileButtonPressed += OnFileButtonPressed;
         _window.CopyButtonPressed += OnCopyButtonPressed;
         _window.SendButtonPressed += OnSendButtonPressed;
         _window.RefreshButtonPressed += OnRefreshButtonPressed;
         _window.PeerSelected += OnPeerSelected;
     }
+
 
     private async void OnFileButtonPressed()
     {
@@ -104,13 +148,32 @@ public sealed class FaxBoundUi : BoundUserInterface
         SendMessage(new FaxDestinationMessage(address));
     }
 
+    private bool _isFaxless;
+
     protected override void UpdateState(BoundUserInterfaceState state)
     {
         base.UpdateState(state);
 
-        if (_window == null || state is not FaxUiState cast)
+        if (state is not FaxUiState cast)
+        {
+            Logger.WarningS("fax", "UpdateState received non-FaxUiState!");
             return;
+        }
 
-        _window.UpdateState(cast);
+        Logger.InfoS("fax", $"UpdateState called. IsFaxless: {cast.IsFaxless}, CanSend: {cast.CanSend}");
+
+        _lastState = cast;
+
+        if (cast.IsFaxless != _isFaxless)
+        {
+            _isFaxless = cast.IsFaxless;
+            Logger.InfoS("fax", $"Switching UI to {(_isFaxless ? "Faxless" : "Fax")} mode");
+            if (_isFaxless)
+                OpenFaxlessUI();
+            else
+                OpenFaxUI();
+        }
+
+        _window?.UpdateState(cast);
     }
 }

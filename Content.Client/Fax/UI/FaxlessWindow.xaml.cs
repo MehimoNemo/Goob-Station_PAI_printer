@@ -17,7 +17,7 @@ using Robust.Client.UserInterface.XAML;
 namespace Content.Client.Fax.UI;
 
 [GenerateTypedNameReferences]
-public sealed partial class FaxWindow : DefaultWindow, IFaxWindow
+public sealed partial class FaxlessWindow : DefaultWindow, IFaxWindow
 {
     public event Action? FileButtonPressed;
     public event Action? PaperButtonPressed;
@@ -29,7 +29,7 @@ public sealed partial class FaxWindow : DefaultWindow, IFaxWindow
     public bool OfficePaper { get; set; } = false;
 
 
-    public FaxWindow()
+    public FaxlessWindow()
     {
         RobustXamlLoader.Load(this);
 
@@ -38,10 +38,6 @@ public sealed partial class FaxWindow : DefaultWindow, IFaxWindow
         FileButton.OnPressed += _ => FileButtonPressed?.Invoke();
         PaperButton.OnPressed += _ => PaperButtonPressed?.Invoke();
         CopyButton.OnPressed += _ => CopyButtonPressed?.Invoke();
-        SendButton.OnPressed += _ => SendButtonPressed?.Invoke();
-        RefreshButton.OnPressed += _ => RefreshButtonPressed?.Invoke();
-        PeerSelector.OnItemSelected += args =>
-            PeerSelected?.Invoke((string) args.Button.GetItemMetadata(args.Id)!);
     }
 
     public void UpdateState(FaxUiState state)
